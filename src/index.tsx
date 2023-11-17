@@ -4,13 +4,24 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import { ConfigProvider } from 'antd';
+import ruRU from 'antd/locale/ru_RU';
+import { MapglContextProvider } from './ui/mapgl/mapglContext';
+import { ChartContextProvider } from './ChartContext';
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <ConfigProvider locale={ruRU}>
+    <MapglContextProvider>
+      <ChartContextProvider>
+        <App />
+      </ChartContextProvider>
+    </MapglContextProvider>
+  </ConfigProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
