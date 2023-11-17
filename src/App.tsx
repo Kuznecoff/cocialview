@@ -8,47 +8,35 @@ import { useMapglContext } from './ui/mapgl/mapglContext';
 import Message from './ui/notification';
 import DataLoader from './service/dataLoader';
 import Timeline from './ui/timeline';
-import JsonViewer from './ui/jsonViewer';
-import { useChartContext } from './ChartContext';
+import ElementResizeListener from './core/elementResizeListener';
+import SideBar from './ui/sideBar';
 
 
 
 
-const { Footer, Sider, Content } = Layout;
+const { Content } = Layout;
 
 const layoutStyle = {
   height: 'calc(100vh - 240px)',
 };
 
-const siderStyle: React.CSSProperties = {
-  textAlign: 'center',
-  lineHeight: '120px',
-  color: '#fff',
-  backgroundColor: '#dddddd',
-};
-const footerStyle: React.CSSProperties = {
-  textAlign: 'center',
-  color: '#fff',
-  backgroundColor: '#ffffff',
-  height: '96px'
-};
 
 
 function App() {
 
   const { mapglInstance } = useMapglContext();
-  useEffect(() => { 
-    setTimeout(() => mapglInstance?.invalidateSize(), 200) }, [mapglInstance]);
 
+  const onResize = () => {
+    mapglInstance?.invalidateSize();
+  }
+  const { actions } = useAppContext();
   return (
     <>
       <AppContextProvider >
 
         <Layout style={layoutStyle} hasSider>
           <HistoryList />
-          <Sider collapsedWidth={0} trigger={null} style={siderStyle} collapsible collapsed={false} width={378}>
-            <JsonViewer></JsonViewer>
-          </Sider>
+          <SideBar />
           <Layout>
             <MainMenu />
             <Content>
@@ -61,6 +49,7 @@ function App() {
           <Message />
         </Layout>
         <DataLoader />
+        <ElementResizeListener onResize={onResize} />
       </AppContextProvider >
       <Timeline />
 

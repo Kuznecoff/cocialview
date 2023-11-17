@@ -69,7 +69,7 @@ export const configMovments: any = (dataInit: any, xField: string) => {
             syncViewPadding: true,
             isPercent: true,
 
-            data: dataInit, filter: (d: any) => { console.log(d); return true },
+            data: dataInit,
             isStack: true,
             xField,
             yField: 'value',

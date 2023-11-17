@@ -56,12 +56,6 @@ const Timeline = () => {
                         onFilter(context);
                     }
                 },
-                {
-                    trigger: 'slider:dbClick',
-                    action: (context) => {
-                        console.log('zoom')
-                    }
-                }
             ],
 
             start: [

@@ -5,6 +5,7 @@ import { useStore } from '../../core/store';
 import { ChartContextActions, useChartContext } from '../../ChartContext';
 import { getEventsByDate } from '../../service/parser';
 
+
 const josnViewStyle: React.CSSProperties = {
     height: '100%',
     overflowY: 'scroll',
@@ -30,6 +31,7 @@ function JsonViewer() {
     }, [chartStore.selectedData.length, chartStore.selectedData, data])
 
     return (
+  
         <ReactJson style={josnViewStyle} iconStyle='triangle' enableClipboard={false} indentWidth={2} displayObjectSize={false} displayDataTypes={false} collapsed={false} collapseStringsAfterLength={20} theme={'shapeshifter:inverted'} src={dataJson} />
     );
 }
