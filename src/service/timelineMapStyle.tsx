@@ -37,4 +37,26 @@ export const layerGeoPoints = {
             7
         ]
     },
+    
+}
+
+export const layerHoverGeoPoints = {
+    type: 'point',
+    id: 'timeline-geo-hover',
+    filter: ['all', ['match', ['sourceAttr', 'timelineHoverLayers'], ['cocial'], true, false], ['match', ['get', 'pointType'], ['movement'], true, false]],
+    minzoom: 12,
+    style: {
+        iconLabelingGroup: '__overlapped',
+        iconImage: ['match', ['get', 'status'], ['moving'], 'reddot', 'graydot'],
+        iconWidth: 24,
+        "iconTextFont": "Noto_Sans",
+        "iconTextField": ['get', 'symbol'],
+        "iconTextColor": "#FBFBFB",
+        "iconTextPadding": [
+            8,
+            14,
+            8,
+            14
+        ]
+    },
 }

@@ -11,3 +11,10 @@ export function isWatchEvent(event:any) {
 export function isCommandEvent(event:any) {
     return !!event.command;
 }
+
+export function getMinMax(filteredData:any){
+   
+    const min = Math.min(...filteredData);
+    const max = Math.max(...filteredData);
+    return [min, max];
+}

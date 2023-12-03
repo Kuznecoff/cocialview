@@ -6,7 +6,6 @@ export const inSeconds = { hour: '2-digit', minute: '2-digit', second: '2-digit'
 
 export function getGeoJson(data: any[] = [], minmaxFilter?: number[]): FeatureCollection {
     const geoTimePoints = data.filter((event: any) => isGeoEvent(event));
-
     const minmax = minmaxFilter || [0, 999999999999999999];
 
     return {
@@ -16,6 +15,45 @@ export function getGeoJson(data: any[] = [], minmaxFilter?: number[]): FeatureCo
             ...generatePoints(geoTimePoints.filter(event => event.timestamp >= minmax[0] && event.timestamp <= minmax[1])),
         ]
     }
+}
+
+export function getGeoBounds(data: any[] = [], minmaxFilter?: number[]): any {
+    const geoTimePoints = data.filter((event: any) => isGeoEvent(event));
+    const minmax = minmaxFilter || [0, 999999999999999999];
+    const geoPoints = geoTimePoints.filter(event => event.timestamp >= minmax[0] && event.timestamp <= minmax[1]);
+    const bounds = {
+        northEast: [0, 0],
+        southWest: [180, 180],
+    }
+    geoPoints.forEach(gp => {
+        const lat = gp.message.movement.location.lat;
+        const lng = gp.message.movement.location.lon;
+        bounds.northEast[1] = Math.max(lat, bounds.northEast[1]);
+        bounds.northEast[0] = Math.max(lng, bounds.northEast[0]);
+        bounds.southWest[1] = Math.min(lat, bounds.southWest[1]);
+        bounds.southWest[0] = Math.min(lng, bounds.southWest[0]);
+    });
+    return bounds;
+}
+
+export function getEventsTimeLine(data: any) {
+    if (!data) {
+        return []
+    }
+    const dataTimeLine = new Array();
+    fillRange(data, dataTimeLine, inMinutes);
+    data.forEach((event: any) => {
+
+        const eventObject: any = { timestamp: event.timestamp, date: dateToLocal(event.timestamp, inMinutes), dateSeconds: dateToLocal(event.timestamp, inSeconds) };
+        if (isGeoEvent(event)) { eventObject.reasonValue = 1; eventObject.reasonType = getMovementReasonsEventType(event) }
+        if (isGeoEvent(event)) { eventObject.movementValue = 1; eventObject.movementType = getMovementEventType(event) };
+        if (isWatchEvent(event)) { eventObject.watchValue = 1; eventObject.watchType = 'Watch' };
+        if (isCommandEvent(event)) { eventObject.commandValue = 1; eventObject.commandType = getCommandEventType(event) };
+
+        dataTimeLine.push(eventObject);
+    }
+    );
+    return dataTimeLine;
 }
 
 
@@ -92,11 +130,11 @@ export function getCommandTimeLine(data: any) {
 
 function dateToLocal(dateOfEvent: any, localRange: any) {
     const date = new Date(+dateOfEvent);
-    return date.toLocaleDateString("ru-RU") + ' ' + date.toLocaleTimeString("ru-RU", localRange)
+    return date.toLocaleDateString("ru-RU", { day: '2-digit', month: '2-digit', year: '2-digit' }) + ' ' + date.toLocaleTimeString("ru-RU", localRange) + (localRange.second ? '' : ':00')
 }
 
 export function fillRange(data: any, dataTimeLine: any, localRange: any) {
-    const shiftTime = localRange.second ? 12000 : 60000;
+    const shiftTime = localRange.second ? 1000 : 60000;
     const minTimestamp = Math.min(...data.map((el: any) => +el.timestamp));
     const maxTimestamp = Math.max(...data.map((el: any) => +el.timestamp));
     for (let timePoint = minTimestamp; timePoint <= maxTimestamp; timePoint = timePoint + shiftTime) {
@@ -162,7 +200,7 @@ function generatePoints(geoTimePoints: any): Feature[] {
             {
                 type: 'Feature',
                 properties: {
-                    message: element.message,
+                    timestamp: element.timestamp,
                     pointType: 'movement',
                     symbol: symbol,
                     status: element.message.movement.marker.status.type || 'unknown'

@@ -15,10 +15,6 @@ export default function Mapgl() {
     const { setMapglContext } = useMapglContext();
     const { data } = useChartContext();
 
-    useEffect(()=>{
-        console.log('updata')
-    },[data])
-
     useEffect(() => {
         let map: mapgl.Map | undefined = undefined;
 

@@ -1,5 +1,5 @@
-export const configReasons: any = (dataInit: any, xField: string, range: number[]) => {
-    
+export const configReasons: any = (dataInit: any, xField: string) => {
+
     return {
 
         height: 130,
@@ -21,17 +21,9 @@ export const configReasons: any = (dataInit: any, xField: string, range: number[
             data: dataInit,
             isStack: true,
             xField,
-            yField: 'value',
-            seriesField: 'type',
-            slider: {
-                id:xField,
-                start: xField === 'date' ? range[0] || 0 : 0,
-                end: xField === 'date' ? range[1] || 0.1 : 1,
-                height: 40,
-                trendCfg: {
-                    isArea: false,
-                },
-            },
+            yField: 'reasonValue',
+            seriesField: 'reasonType',
+
             yAxis: {
                 label: {
                     offsetX: 25,
@@ -40,6 +32,11 @@ export const configReasons: any = (dataInit: any, xField: string, range: number[
                     }
                 }
             },
+            brush: {
+                enabled: true,
+                type: 'x-rect',
+            },
+
 
             interactions: [
                 {
@@ -72,9 +69,9 @@ export const configMovments: any = (dataInit: any, xField: string) => {
             data: dataInit,
             isStack: true,
             xField,
-            yField: 'value',
-            color: ({ type }: any) => type === 'Moving' ? '#ff0000' : '#888888',
-            seriesField: 'type',
+            yField: 'movementValue',
+            color: ({ movementType }: any) => movementType === 'Moving' ? '#ff0000' : '#888888',
+            seriesField: 'movementType',
             xAxis: {
                 label: {
 
@@ -120,16 +117,16 @@ export const configWatches: any = (dataInit: any, xField: string) => {
             data: dataInit,
             isStack: true,
             xField,
-            yField: 'value',
-            seriesField: 'type',
-            color: ({ type }: any) => type === 'Watch' ? '#fcba03' : '#888888',
+            yField: 'watchValue',
+            seriesField: 'watchType',
+            color: ({ watchType }: any) => watchType === 'Watch' ? '#fcba03' : '#888888',
             xAxis: {
                 label: {
 
                     style: {
                         fillOpacity: 0,
                     },
-                    offsetY: 0,
+                    offsetY: -10,
                 }
             },
             yAxis: {
@@ -162,15 +159,15 @@ export const configCommands: any = (dataInit: any, xField: string) => {
             data: dataInit,
             isStack: true,
             xField,
-            yField: 'value',
-            seriesField: 'type',
+            yField: 'commandValue',
+            seriesField: 'commandType',
             xAxis: {
                 label: {
 
                     style: {
                         fillOpacity: 0,
                     },
-                    offsetY: -10,
+                    offsetY: 0,
                 }
             },
             yAxis: {
@@ -194,10 +191,7 @@ export const configMix: any = (plotsConfigs: any) => {
 
     return {
         height,
-        legend: {
-            layout: 'horizontal',
-            position: 'bottom'
-        },
+
 
         plots: [...plotsConfigs]
     }

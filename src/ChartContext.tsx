@@ -1,7 +1,8 @@
 import { ReactNode, createContext, useContext, useState } from "react"
 export type ChartContextActions = {
     filteredData?: any[],
-    rawJson?: any
+    rawJson?: any,
+    mainTimeline?:any,
     xFiled?: string,
 };
 export type ChartContextState = {

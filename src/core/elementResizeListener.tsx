@@ -19,6 +19,7 @@ const ElementResizeListener: React.FC<Props> = ({ onResize }) => {
   const _onResize = useCallback((e: Event) => {
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
+      
     }
     rafRef.current = requestAnimationFrame(() => {
       onResizeRef.current(e);

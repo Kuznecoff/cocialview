@@ -4,7 +4,9 @@ const chartStore = () => {
     return makeAutoObservable({
         filteredData: [] as any[],
         selectedData: '',
-        xField: ''
+        xField: '',
+        timelineData: [] as any[],
+        hoverData: [] as any[],
     });
 };
 
